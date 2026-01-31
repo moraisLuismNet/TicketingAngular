@@ -1,0 +1,103 @@
+<div class="ticket-detail-panel">
+  <div class="panel-overlay" (click)="onClose()"></div>
+  
+  <div class="panel-content">
+    <div class="panel-header">
+      <button class="btn-back" (click)="onClose()">
+        ← Go back
+      </button>
+    </div>
+
+    <div class="panel-body">
+      <div class="ticket-header">
+        <h2>{{ ticket.creatorName || 'Unknown' }} #{{ ticket.id }}</h2>
+        <div class="ticket-meta">
+          <span class="meta-item">
+            👤 {{ ticket.assignedAgentName || 'Unassigned' }}
+          </span>
+          <span class="meta-item">
+            📅 {{ formatDate(ticket.createdAt) }}
+          </span>
+        </div>
+      </div>
+
+      <form [formGroup]="ticketForm" class="ticket-form">
+        <div class="form-section">
+          <label class="form-label">Current Status:</label>
+          <select
+            formControlName="status"
+            class="form-select"
+          >
+            @for (status of ticketStatuses; track status.value) {
+              <option [ngValue]="status.value">
+                {{ status.label }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">Title:</label>
+          <input
+            type="text"
+            formControlName="title"
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">Description:</label>
+          <textarea
+            formControlName="description"
+            class="form-textarea"
+            rows="4"
+          ></textarea>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">Priority:</label>
+          <select
+            formControlName="priority"
+            class="form-select"
+          >
+
+
+
+            @for (priority of ticketPriorities; track priority.value) {
+              <option [ngValue]="priority.value">
+                {{ priority.label }}
+              </option>
+            }
+          </select>
+        </div>
+
+
+
+      </form>
+
+      <!-- Footer Actions: Show only if ticket is modified -->
+
+      @if (ticketForm.dirty) {
+        <div class="footer-actions">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="onCancel()"
+            [disabled]="isSaving"
+          >
+            Cancel Changes
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="saveTicket()"
+            [disabled]="ticketForm.invalid || isSaving"
+          >
+            {{ isSaving ? 'Saving...' : 'Save Changes' }}
+          </button>
+        </div>
+      }
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="logo" style="justify-content: center; width: 100%;">
+      <img src="/logo.jpg" alt="Ticketing Logo" class="logo-img" style="height: 80px; width: auto; object-fit: contain;">
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a
+      *ngFor="let item of menuItems"
+      [routerLink]="item.route"
+      routerLinkActive="active"
+      class="nav-item"
+    >
+      <span class="nav-icon" [attr.data-icon]="item.icon"></span>
+      <span class="nav-label">{{ item.label }}</span>
+    </a>
+  </nav>
+</aside>

@@ -1,0 +1,127 @@
+<div class="tickets-container">
+  <div class="tickets-header">
+    <div class="header-content">
+      <h1>Tickets Management</h1>
+    </div>
+    <button *ngIf="!authService.isAgent()" class="btn btn-primary" (click)="openCreateTicket()">+ New Ticket</button>
+  </div>
+
+  <app-ticket-create
+    *ngIf="isCreatingTicket"
+    (close)="closeCreateTicket()"
+    (created)="onTicketCreated()">
+  </app-ticket-create>
+
+  <div class="filters-bar">
+    <div class="search-box">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange()"
+        placeholder="Filter by title, user or date (MM/DD/YYYY)..."
+        class="form-input"
+      />
+    </div>
+
+    <div class="filter-group">
+      <select
+        [(ngModel)]="selectedStatus"
+        (ngModelChange)="onStatusChange()"
+        class="form-select"
+      >
+        <option value="">All Statuses</option>
+        @for (s of ticketStatuses; track s.value) {
+          <option [value]="s.value">{{ s.label }}</option>
+        }
+      </select>
+
+      <select
+        [(ngModel)]="selectedPriority"
+        (ngModelChange)="onPriorityChange()"
+        class="form-select"
+      >
+        <option value="">All Priorities</option>
+        @for (p of ticketPriorities; track p.value) {
+          <option [value]="p.value">{{ p.label }}</option>
+        }
+      </select>
+    </div>
+
+
+  </div>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-error">
+    {{ errorMessage }}
+  </div>
+
+  <div class="tickets-table" *ngIf="!isLoading && !errorMessage">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th *ngIf="authService.isAgent()">User</th>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Priority</th>
+          <th *ngIf="authService.isAgent()"></th>
+        </tr>
+
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let ticket of paginatedTickets"
+          (click)="selectTicket(ticket)"
+          class="ticket-row"
+          [class.selected]="selectedTicket?.id === ticket.id"
+        >
+          <td>{{ formatDate(ticket.createdAt) }}</td>
+          <td *ngIf="authService.isAgent()">{{ ticket.creatorName || 'Unknown' }}</td>
+          <td class="ticket-title">{{ ticket.title }}</td>
+          <td>
+            <span class="badge" [ngClass]="getStatusClass(ticket.status)">
+              {{ formatStatus(ticket.status) }}
+            </span>
+          </td>
+          <td>
+            <span class="badge" [ngClass]="getPriorityClass(ticket.priority)">
+              {{ formatPriority(ticket.priority) }}
+            </span>
+          </td>
+          <td *ngIf="authService.isAgent()">
+            <button
+              *ngIf="ticket.status === 0"
+              class="btn-assigned"
+              (click)="assignToMe($event, ticket)"
+            >
+              Assigned
+            </button>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    <div *ngIf="filteredTickets.length === 0" class="empty-state">
+      <p>No tickets found</p>
+    </div>
+
+    <app-pagination
+      [totalItems]="filteredTickets.length"
+      [pageSize]="pageSize"
+      [currentPage]="currentPage"
+      (pageChange)="onPageChange($event)">
+    </app-pagination>
+  </div>
+
+  @if (selectedTicket) {
+    <app-ticket-detail
+      [ticket]="selectedTicket"
+      (close)="closeTicketDetail()"
+      (ticketUpdated)="onTicketUpdated()"
+    ></app-ticket-detail>
+  }
+</div>
