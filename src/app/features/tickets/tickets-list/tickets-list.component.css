@@ -136,6 +136,21 @@
 
 
 
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--color-gray-900);
+}
+
+.user-email {
+  font-size: 0.8em;
+  color: var(--color-gray-500);
+}
+
 .empty-state {
   padding: var(--spacing-2xl);
   text-align: center;

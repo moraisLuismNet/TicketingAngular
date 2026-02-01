@@ -23,7 +23,7 @@ export class SidebarComponent {
     { icon: 'ticket', label: 'Tickets', route: '/tickets' },
     { icon: 'users', label: 'Users', route: '/clients', staffOnly: true },
     { icon: 'team', label: 'Agents', route: '/team', adminOnly: true },
-    { icon: 'briefcase', label: 'Contractors', route: '/contractors', adminOnly: true }
+    { icon: 'activity', label: 'Audit Logs', route: '/audit-logs', adminOnly: true }
   ];
 
   constructor(private authService: AuthService) {}

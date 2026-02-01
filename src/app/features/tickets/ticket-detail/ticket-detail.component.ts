@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TicketService } from '../../../core/services/ticket.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { Ticket, TicketStatus, TicketPriority, UpdateTicketDTO, AddCommentDTO } from '../../../core/models/ticket.model';
+import { Ticket, TicketStatus, TicketPriority, UpdateTicketDTO } from '../../../core/models/ticket.model';
 
 @Component({
   selector: 'app-ticket-detail',
@@ -20,6 +20,8 @@ export class TicketDetailComponent implements OnInit {
 
   ticketForm!: FormGroup;
   isSaving = false;
+  isUploading = false;
+  canAddAttachment = false;
 
 
 
@@ -56,6 +58,9 @@ export class TicketDetailComponent implements OnInit {
     
     // Only the assigned agent or an admin can change the status
     const canChangeStatus = isAdmin || (isAgent && this.ticket.assignedAgentId === currentUser?.id);
+    this.canAddAttachment = !isAgent; // Only customers can add attachments
+    // User requested: "al abrir el ticket desde el agente logueado no se deberia mostrar add atachment"
+    // So if isAgent is true (and not Admin), hide it.
     
     this.ticketForm = this.fb.group({
       title: [this.ticket.title, Validators.required],
@@ -112,7 +117,84 @@ export class TicketDetailComponent implements OnInit {
     });
   }
 
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.isUploading = true;
+      this.ticketService.uploadAttachment(this.ticket.id, file).subscribe({
+        next: (attachment) => {
+          if (!this.ticket.attachments) {
+            this.ticket.attachments = [];
+          }
+          this.ticket.attachments.push(attachment);
+          this.isUploading = false;
+          this.cdr.detectChanges();
+        },
+        error: (error) => {
+          console.error('Failed to upload attachment:', error);
+          this.isUploading = false;
+        }
+      });
+    }
+  }
 
+  isImage(attachment: any): boolean {
+    const validExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg'];
+    const fileName = attachment.fileName.toLowerCase();
+    const contentType = attachment.contentType?.toLowerCase() || '';
+    
+    return validExtensions.some(ext => fileName.endsWith(ext)) || 
+           contentType.startsWith('image/');
+  }
+
+  isVideo(attachment: any): boolean {
+      const validExtensions = ['.mp4', '.webm', '.ogv', '.mov', '.avi', '.mkv', '.wmv', '.flv'];
+      const fileName = attachment.fileName.toLowerCase();
+      const contentType = attachment.contentType?.toLowerCase() || '';
+      
+      return validExtensions.some(ext => fileName.endsWith(ext)) || 
+             contentType.startsWith('video/');
+  }
+
+  getFileIcon(fileName: string): string {
+    const ext = fileName.split('.').pop()?.toLowerCase() || '';
+    
+    switch (ext) {
+      case 'pdf': return '📕';
+      case 'doc':
+      case 'docx': 
+      case 'txt':
+      case 'rtf': return '📄';
+      case 'xls':
+      case 'xlsx':
+      case 'csv': return '📊';
+      case 'zip':
+      case 'rar':
+      case '7z':
+      case 'tar':
+      case 'gz': return '📦';
+      default: return '📎';
+    }
+  }
+
+  downloadAttachment(attachment: any): void {
+    const isPdf = attachment.fileName.toLowerCase().endsWith('.pdf');
+    
+    if (attachment.filePath && !isPdf) {
+      window.open(attachment.filePath, '_blank');
+      return;
+    }
+
+    // Use blob download for PDFs or if filePath is missing to force browser download
+    this.ticketService.downloadAttachment(this.ticket.id, attachment.id).subscribe(blob => {
+      const a = document.createElement('a');
+      const objectUrl = URL.createObjectURL(blob);
+      a.href = objectUrl;
+      a.download = attachment.fileName;
+      a.click();
+      URL.revokeObjectURL(objectUrl);
+    });
+  }
 
   getStatusClass(status: TicketStatus): string {
     const statusMap: Record<TicketStatus, string> = {

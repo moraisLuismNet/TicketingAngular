@@ -7,8 +7,7 @@ import {
   CreateTicketDTO,
   UpdateTicketDTO,
   UpdateTicketStatusDTO,
-  AddCommentDTO,
-  TicketComment
+  TicketAttachment
 } from '../models/ticket.model';
 
 @Injectable({
@@ -55,7 +54,14 @@ export class TicketService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  addComment(ticketId: number, data: AddCommentDTO): Observable<TicketComment> {
-    return this.http.post<TicketComment>(`${this.apiUrl}/${ticketId}/comments`, data);
+
+  uploadAttachment(ticketId: number, file: File): Observable<TicketAttachment> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<TicketAttachment>(`${this.apiUrl}/${ticketId}/attachments`, formData);
+  }
+
+  downloadAttachment(ticketId: number, attachmentId: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/${ticketId}/attachments/${attachmentId}`, { responseType: 'blob' });
   }
 }

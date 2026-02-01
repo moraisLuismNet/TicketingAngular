@@ -99,6 +99,11 @@
     content: '👨‍👩‍👧‍👦';
     font-size: 18px;
   }
+
+  &[data-icon="activity"]::before {
+    content: '📜';
+    font-size: 18px;
+  }
 }
 
 @media (max-width: 768px) {

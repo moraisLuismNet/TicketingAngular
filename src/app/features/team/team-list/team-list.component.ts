@@ -16,42 +16,52 @@ import { User, UserRole } from '../../../core/models/user.model';
         </div>
       </div>
 
-      <div *ngIf="isLoading" class="loading-container">
-        <div class="spinner"></div>
-      </div>
-
-      <div *ngIf="errorMessage" class="alert alert-error">
-        {{ errorMessage }}
-      </div>
-
-      <div class="team-table" *ngIf="!isLoading && !errorMessage">
-        <table>
-          <thead>
-            <tr>
-              <th>Joined Date</th>
-              <th>Full Name</th>
-              <th>Email</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let agent of agents" class="agent-row">
-              <td>{{ formatDate(agent.createdAt) }}</td>
-              <td class="agent-name">{{ agent.fullName }}</td>
-              <td>{{ agent.email }}</td>
-              <td>
-                <span class="badge" [ngClass]="agent.isActive ? 'badge-active' : 'badge-inactive'">
-                  {{ agent.isActive ? 'Active' : 'Inactive' }}
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div *ngIf="agents.length === 0" class="empty-state">
-          <p>No agents found</p>
+      @if (isLoading) {
+        <div class="loading-container">
+          <div class="spinner"></div>
         </div>
-      </div>
+      }
+
+      @if (errorMessage) {
+        <div class="alert alert-error">
+          {{ errorMessage }}
+        </div>
+      }
+
+      @if (!isLoading && !errorMessage) {
+        <div class="team-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Joined Date</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (agent of agents; track agent.id) {
+                <tr class="agent-row">
+                  <td>{{ formatDate(agent.createdAt) }}</td>
+                  <td class="agent-name">{{ agent.fullName }}</td>
+                  <td>{{ agent.email }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="agent.isActive ? 'badge-active' : 'badge-inactive'">
+                      {{ agent.isActive ? 'Active' : 'Inactive' }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          @if (agents.length === 0) {
+            <div class="empty-state">
+              <p>No agents found</p>
+            </div>
+          }
+        </div>
+      }
     </div>
   `,
   styles: [`

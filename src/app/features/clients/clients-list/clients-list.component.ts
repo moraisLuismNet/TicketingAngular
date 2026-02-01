@@ -11,47 +11,57 @@ import { User, UserRole } from '../../../core/models/user.model';
     <div class="clients-container">
       <div class="clients-header">
         <div class="header-content">
-          <h1>Clients Management</h1>
+          <h1>Users Management</h1>
           <p>View and manage all registered customers in the system.</p>
         </div>
       </div>
 
-      <div *ngIf="isLoading" class="loading-container">
-        <div class="spinner"></div>
-      </div>
-
-      <div *ngIf="errorMessage" class="alert alert-error">
-        {{ errorMessage }}
-      </div>
-
-      <div class="clients-table" *ngIf="!isLoading && !errorMessage">
-        <table>
-          <thead>
-            <tr>
-              <th>Joined Date</th>
-              <th>Full Name</th>
-              <th>Email</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let client of clients" class="client-row">
-              <td>{{ formatDate(client.createdAt) }}</td>
-              <td class="client-name">{{ client.fullName }}</td>
-              <td>{{ client.email }}</td>
-              <td>
-                <span class="badge" [ngClass]="client.isActive ? 'badge-active' : 'badge-inactive'">
-                  {{ client.isActive ? 'Active' : 'Inactive' }}
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div *ngIf="clients.length === 0" class="empty-state">
-          <p>No clients found</p>
+      @if (isLoading) {
+        <div class="loading-container">
+          <div class="spinner"></div>
         </div>
-      </div>
+      }
+
+      @if (errorMessage) {
+        <div class="alert alert-error">
+          {{ errorMessage }}
+        </div>
+      }
+
+      @if (!isLoading && !errorMessage) {
+        <div class="clients-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Joined Date</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (client of clients; track client.id) {
+                <tr class="client-row">
+                  <td>{{ formatDate(client.createdAt) }}</td>
+                  <td class="client-name">{{ client.fullName }}</td>
+                  <td>{{ client.email }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="client.isActive ? 'badge-active' : 'badge-inactive'">
+                      {{ client.isActive ? 'Active' : 'Inactive' }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          @if (clients.length === 0) {
+            <div class="empty-state">
+              <p>No clients found</p>
+            </div>
+          }
+        </div>
+      }
     </div>
   `,
   styles: [`

@@ -19,10 +19,12 @@
           [class.error]="email?.invalid && email?.touched"
           placeholder="Enter your email"
         />
-        <div *ngIf="email?.invalid && email?.touched" class="error-message">
-          <span *ngIf="email?.errors?.['required']">Email is required</span>
-          <span *ngIf="email?.errors?.['email']">Please enter a valid email</span>
-        </div>
+        @if (email?.invalid && email?.touched) {
+          <div class="error-message">
+            @if (email?.errors?.['required']) { <span>Email is required</span> }
+            @if (email?.errors?.['email']) { <span>Please enter a valid email</span> }
+          </div>
+        }
       </div>
 
       <div class="form-group">
@@ -35,23 +37,30 @@
           [class.error]="password?.invalid && password?.touched"
           placeholder="Enter your password"
         />
-        <div *ngIf="password?.invalid && password?.touched" class="error-message">
-          <span *ngIf="password?.errors?.['required']">Password is required</span>
-          <span *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</span>
-        </div>
+        @if (password?.invalid && password?.touched) {
+          <div class="error-message">
+            @if (password?.errors?.['required']) { <span>Password is required</span> }
+            @if (password?.errors?.['minlength']) { <span>Password must be at least 6 characters</span> }
+          </div>
+        }
       </div>
 
-      <div *ngIf="errorMessage" class="alert alert-error">
-        {{ errorMessage }}
-      </div>
+      @if (errorMessage) {
+        <div class="alert alert-error">
+          {{ errorMessage }}
+        </div>
+      }
 
       <button
         type="submit"
         class="btn btn-primary btn-block"
         [disabled]="loginForm.invalid || isLoading"
       >
-        <span *ngIf="!isLoading">Sign In</span>
-        <span *ngIf="isLoading" class="spinner-small"></span>
+        @if (!isLoading) {
+          <span>Sign In</span>
+        } @else {
+          <span class="spinner-small"></span>
+        }
       </button>
     </form>
 

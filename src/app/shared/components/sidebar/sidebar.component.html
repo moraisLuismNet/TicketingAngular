@@ -6,14 +6,15 @@
   </div>
 
   <nav class="sidebar-nav">
-    <a
-      *ngFor="let item of menuItems"
-      [routerLink]="item.route"
-      routerLinkActive="active"
-      class="nav-item"
-    >
-      <span class="nav-icon" [attr.data-icon]="item.icon"></span>
-      <span class="nav-label">{{ item.label }}</span>
-    </a>
+    @for (item of menuItems; track item.route) {
+      <a
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        class="nav-item"
+      >
+        <span class="nav-icon" [attr.data-icon]="item.icon"></span>
+        <span class="nav-label">{{ item.label }}</span>
+      </a>
+    }
   </nav>
 </aside>

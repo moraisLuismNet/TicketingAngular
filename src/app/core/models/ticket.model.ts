@@ -21,32 +21,23 @@ export interface Ticket {
   status: TicketStatus;
   creatorId: number;
   creatorName: string;
+  creatorEmail: string;
   assignedAgentId?: number;
   assignedAgentName: string;
-  comments?: TicketComment[];
+  assignedAgentEmail: string;
   attachments?: TicketAttachment[];
   createdAt: string;
   updatedAt: string;
 }
 
-export interface TicketComment {
-  id: number;
-  ticketId: number;
-  userId: number;
-  userName: string;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
-  isInternal: boolean;
-}
-
 export interface TicketAttachment {
   id: number;
-  ticketId: number;
   fileName: string;
-  fileUrl: string;
-  fileSize: number;
-  uploadedAt: string;
+  contentType: string;
+  size: number;
+  createdAt: string;
+  uploaderName: string;
+  filePath?: string;
 }
 
 export interface CreateTicketDTO {
@@ -66,8 +57,4 @@ export interface UpdateTicketDTO {
 
 export interface UpdateTicketStatusDTO {
   status: TicketStatus;
-}
-
-export interface AddCommentDTO {
-  content: string;
 }

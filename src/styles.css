@@ -164,6 +164,14 @@ html, body {
   text-decoration: none;
 }
 
+.btn:disabled {
+  background-color: var(--color-gray-300) !important;
+  color: var(--color-gray-500) !important;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
 .btn-primary {
   background-color: var(--color-primary);
   color: var(--color-white);

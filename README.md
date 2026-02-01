@@ -1,6 +1,6 @@
 # TicketingAngular
 
-Angular 20 frontend for the TicketingApiNet system.
+Angular 20 frontend for the Ticketing system.
 
 ## Features
 
@@ -74,3 +74,14 @@ export const environment = {
   apiUrl: 'https://localhost:7001/api'
 };
 ```
+
+## 📸 Screenshots
+
+| | | |
+| :---: | :---: | :---: |
+| <kbd><img src="img/01.png" width="40%" height="90%" alt="TicketingAngular_01"></kbd> | <kbd><img src="img/02.png" width="40%" height="90%" alt="TicketingAngular_02"></kbd> | <kbd><img src="img/03.png" width="90%" height="90%" alt="TicketingAngular_03"></kbd> |
+| <kbd><img src="img/04.png" width="90%" height="90%" alt="TicketingAngular_04"></kbd> | <kbd><img src="img/05.png" width="110%" height="90%" alt="TicketingAngular_05"></kbd> | <kbd><img src="img/06.png" width="110%" height="90%" alt="TicketingAngular_06"></kbd> |
+| <kbd><img src="img/07.png" width="90%" height="90%" alt="TicketingAngular_07"></kbd> | <kbd><img src="img/08.png" width="90%" height="90%" alt="TicketingAngular_08"></kbd> | <kbd><img src="img/09.png" width="90%" height="90%" alt="TicketingAngular_09"></kbd> |
+| <kbd><img src="img/10.png" width="90%" height="90%" alt="TicketingAngular_10"></kbd> 
+
+[DeepWiki moraisLuismNet/TicketingAngular](https://deepwiki.com/moraisLuismNet/TicketingAngular)

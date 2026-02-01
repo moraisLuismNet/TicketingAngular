@@ -12,8 +12,16 @@
       <div class="ticket-header">
         <h2>{{ ticket.creatorName || 'Unknown' }} #{{ ticket.id }}</h2>
         <div class="ticket-meta">
-          <span class="meta-item">
+          @if (ticket.creatorEmail) {
+            <span class="meta-item" title="Customer Email">
+              📧 {{ ticket.creatorEmail }}
+            </span>
+          }
+          <span class="meta-item" title="Assigned Agent">
             👤 {{ ticket.assignedAgentName || 'Unassigned' }}
+            @if (ticket.assignedAgentEmail) {
+              <span class="agent-email">({{ ticket.assignedAgentEmail }})</span>
+            }
           </span>
           <span class="meta-item">
             📅 {{ formatDate(ticket.createdAt) }}
@@ -74,6 +82,60 @@
 
 
       </form>
+
+      <div class="attachments-section">
+        <h3>Attachments</h3>
+        <div class="attachments-list">
+          @for (attachment of ticket.attachments; track attachment.id) {
+            <div class="attachment-item" [class.preview-mode]="isImage(attachment) || isVideo(attachment)">
+              @if (isImage(attachment)) {
+                <div class="image-preview" (click)="downloadAttachment(attachment)">
+                  <img [src]="attachment.filePath" [alt]="attachment.fileName" title="Click to view full size">
+                </div>
+                <div class="attachment-meta">
+                  <span class="attachment-name">{{ attachment.fileName }}</span>
+                  <span class="attachment-size">({{ (attachment.size / 1024).toFixed(1) }} KB)</span>
+                </div>
+              } @else if (isVideo(attachment)) {
+                 <div class="video-preview">
+                    <video [src]="attachment.filePath" controls preload="metadata" title="{{ attachment.fileName }}"></video>
+                 </div>
+                 <div class="attachment-meta">
+                  <span class="attachment-name">{{ attachment.fileName }} (Video)</span>
+                  <span class="attachment-size">({{ (attachment.size / 1024).toFixed(1) }} KB)</span>
+                </div>
+              } @else {
+                <span class="attachment-icon">{{ getFileIcon(attachment.fileName) }}</span>
+                <a href="javascript:void(0)" class="attachment-name" (click)="downloadAttachment(attachment)">
+                  {{ attachment.fileName }}
+                </a>
+                <span class="attachment-size">({{ (attachment.size / 1024).toFixed(1) }} KB)</span>
+              }
+            </div>
+          } @empty {
+            <p class="no-attachments">No attachments yet.</p>
+          }
+        </div>
+
+        @if (canAddAttachment) {
+        <div class="upload-section">
+          <input
+            type="file"
+            #fileInput
+            (change)="onFileSelected($event)"
+            style="display: none"
+          />
+          <button
+            type="button"
+            class="btn-upload"
+            (click)="fileInput.click()"
+            [disabled]="isUploading"
+          >
+            {{ isUploading ? 'Uploading...' : '+ Add Attachment' }}
+          </button>
+        </div>
+        }
+      </div>
 
       <!-- Footer Actions: Show only if ticket is modified -->
 

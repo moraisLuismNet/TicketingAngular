@@ -133,7 +133,17 @@ export class TicketsListComponent implements OnInit {
 
 
   selectTicket(ticket: Ticket): void {
-    this.selectedTicket = ticket;
+    this.isLoading = true;
+    this.ticketService.getTicketById(ticket.id).subscribe({
+      next: (fullTicket) => {
+        this.selectedTicket = fullTicket;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.errorMessage = error.message || 'Failed to load ticket details';
+        this.isLoading = false;
+      }
+    });
   }
 
   closeTicketDetail(): void {

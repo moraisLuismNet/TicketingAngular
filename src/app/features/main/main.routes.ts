@@ -16,12 +16,12 @@ export const MAIN_ROUTES: Routes = [
         loadComponent: () => import('../clients/clients-list/clients-list.component').then(m => m.ClientsListComponent)
       },
       {
-        path: 'contractors',
-        loadComponent: () => import('../contractors/contractors-list/contractors-list.component').then(m => m.ContractorsListComponent)
-      },
-      {
         path: 'team',
         loadComponent: () => import('../team/team-list/team-list.component').then(m => m.TeamListComponent)
+      },
+      {
+        path: 'audit-logs',
+        loadComponent: () => import('../audit-logs/audit-logs-list/audit-logs-list.component').then(m => m.AuditLogsListComponent)
       },
       {
         path: '',
