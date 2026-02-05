@@ -16,9 +16,14 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       } else {
         // Server-side error
         if (error.status === 401) {
-          // Unauthorized - redirect to login
-          router.navigate(['/auth/login']);
-          errorMessage = 'Session expired. Please login again.';
+          if (req.url.includes('/auth/login')) {
+            // Login failed
+            errorMessage = 'Credenciales incorrectas.';
+          } else {
+            // Unauthorized - redirect to login
+            router.navigate(['/auth/login']);
+            errorMessage = 'La sesión ha expirado. Por favor inicie sesión nuevamente.';
+          }
         } else if (error.status === 403) {
           errorMessage = 'You do not have permission to perform this action.';
         } else if (error.status === 404) {
