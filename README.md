@@ -8,6 +8,7 @@ Angular 20 frontend for the Ticketing system.
 - **Tickets Management**: Full CRUD operations with filtering and comments
 - **Modern UI**: Clean, professional design with responsive layout
 - **Real-time Updates**: Live ticket status and comment updates
+- **Progressive Web App (PWA)**: Installable app with offline support and native-like experience
 
 ## Prerequisites
 
@@ -75,6 +76,19 @@ export const environment = {
 };
 ```
 
+## 📱 Progressive Web App (PWA)
+
+This application is configured as a PWA. For detailed information about PWA features, installation, and testing, see [PWA_SETUP.md](PWA_SETUP.md).
+
+**Quick start:**
+```bash
+# Build for production (PWA only works in production mode)
+npm run build
+
+# Serve the production build
+npx http-server dist/ticketing-angular/browser -p 8080
+```
+
 ## 📸 Screenshots
 
 | | | |
@@ -85,3 +99,6 @@ export const environment = {
 | <kbd><img src="img/10.png" width="90%" height="90%" alt="TicketingAngular_10"></kbd> 
 
 [DeepWiki moraisLuismNet/TicketingAngular](https://deepwiki.com/moraisLuismNet/TicketingAngular)
+
+deployed in:
+https://ticketing-angular.vercel.app/auth/login
