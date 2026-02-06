@@ -101,4 +101,4 @@ npx http-server dist/ticketing-angular/browser -p 8080
 [DeepWiki moraisLuismNet/TicketingAngular](https://deepwiki.com/moraisLuismNet/TicketingAngular)
 
 deployed in:
-https://ticketing-angular.vercel.app/auth/login
+https://ticketing-angular-kj65.vercel.app/auth/login
